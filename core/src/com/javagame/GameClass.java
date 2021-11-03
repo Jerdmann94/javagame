@@ -49,7 +49,7 @@ public class GameClass extends ApplicationAdapter {
 	Character player;
 	MapObjects mapObjects = new MapObjects();
 	TiledMapStage stageMap;
-	HorizontalGroup table;
+	Table table;
 	Table rootTable;
 
 	TextButton confirm;
@@ -147,7 +147,8 @@ public class GameClass extends ApplicationAdapter {
 
 	private void createButtons() {
 
-		table = new HorizontalGroup();
+		table = new Table();
+
 		buttons = new ArrayList<CardButton>();
 		for (int i = 0; i < player.getHand().size(); i++) {
 			buttons.add(new CardButton("Click me!", skin,player.getHand().get(i)));
@@ -162,8 +163,8 @@ public class GameClass extends ApplicationAdapter {
 
 			//buttons.get(i).setPosition(0,0);
 
-//			table.add(buttons.get(i)).pad(10).width(150).height(250);
-			table.addActor(buttons.get(i));
+			table.add(buttons.get(i)).pad(10).width(150).height(250);
+
 
 
 
@@ -183,11 +184,9 @@ public class GameClass extends ApplicationAdapter {
 			});
 
 		}
+		table.setPosition(Gdx.graphics.getWidth()/2,150 );
+		rootTable.addActor(table);
 
-		table.space(5).pad(10);
-		table.grow();
-
-		rootTable.add(table);
 
 
 	}
@@ -214,7 +213,7 @@ public class GameClass extends ApplicationAdapter {
 
 		confirm.setHeight(250);
 		confirm.setWidth(150);
-		confirm.setPosition(0,0);
+		confirm.setPosition(100,100);
 		confirm.addListener(new ChangeListener() {
 			public void changed (ChangeEvent event, Actor actor) {
 
