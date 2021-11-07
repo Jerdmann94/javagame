@@ -34,6 +34,7 @@ import java.util.ArrayList;
 
 
 public class GameClass extends ApplicationAdapter {
+
 	SpriteBatch batch;
 	Texture img;
 	TextureRegion region;
@@ -41,20 +42,14 @@ public class GameClass extends ApplicationAdapter {
 	OrthographicCamera camera;
 	TiledMap tiledMap;
 	OrthogonalTiledMapRenderer tiledMapRenderer;
-
-
 	Skin skin;
-	ArrayList<CardButton> buttons;
-
 	Character player;
-	MapObjects mapObjects = new MapObjects();
 	TiledMapStage stageMap;
-	HorizontalGroup table;
+	Table handTable;
 	Table rootTable;
-
 	TextButton confirm;
 
-
+	ArrayList<CardButton> cardButtons;
 
 	
 	@Override
@@ -99,7 +94,7 @@ public class GameClass extends ApplicationAdapter {
 
 	@Override
 	public void render () {
-		ScreenUtils.clear(1, 0, 0, 1);
+		ScreenUtils.clear(1, 1, 1, 1);
 		camera.update();
 		tiledMapRenderer.setView(camera);
 		tiledMapRenderer.render();
@@ -147,30 +142,18 @@ public class GameClass extends ApplicationAdapter {
 
 	private void createButtons() {
 
-		table = new HorizontalGroup();
-		buttons = new ArrayList<CardButton>();
+		handTable = new Table();
+		cardButtons = new ArrayList<CardButton>();
 		for (int i = 0; i < player.getHand().size(); i++) {
-			buttons.add(new CardButton("Click me!", skin,player.getHand().get(i)));
-            player.getHand().get(i).setButton(buttons.get(i));
+			cardButtons.add(new CardButton("Click me!", skin,player.getHand().get(i)));
+            player.getHand().get(i).setButton(cardButtons.get(i));
 
 			EventListener eventListener = new CardListener(player);
-			buttons.get(i).addListener(eventListener);
+			cardButtons.get(i).addListener(eventListener);
 
-			buttons.get(i).setHeight(250);
-			buttons.get(i).setWidth(150);
-
-
-			//buttons.get(i).setPosition(0,0);
-
-//			table.add(buttons.get(i)).pad(10).width(150).height(250);
-			table.addActor(buttons.get(i));
-
-
-
-
-
-
-			buttons.get(i).addListener(new ChangeListener() {
+			cardButtons.get(i).setHeight(250);
+			cardButtons.get(i).setWidth(150);
+			cardButtons.get(i).addListener(new ChangeListener() {
 				public void changed (ChangeEvent event, Actor actor) {
 
 					CardButton butt = (CardButton)actor;
@@ -184,10 +167,7 @@ public class GameClass extends ApplicationAdapter {
 
 		}
 
-		table.space(5).pad(10);
-		table.grow();
-
-		rootTable.add(table);
+		buildHandTable();
 
 
 	}
@@ -220,14 +200,11 @@ public class GameClass extends ApplicationAdapter {
 
 				TextButton butt = (TextButton)actor;
 				butt.setText("Clicked");
+				cardButtons.remove(player.getSelectedCard().getCardButton());
 				player.getSelectedCard().playCard();
-
-
-//				table.removeActor(player.getSelectedCard().getActor());
-//
-//                table.pack();
 				player.resetCells();
 				removeConfirm();
+				buildHandTable();
 
 			}
 		});
@@ -237,6 +214,26 @@ public class GameClass extends ApplicationAdapter {
 	private void removeConfirm() {
 		confirm.remove();
 		stageMap.removeActors();
+	}
+	private void buildHandTable(){
+		handTable.clearChildren();
+		handTable.remove();
+		handTable.pack();
+		handTable.pad(25);
+
+
+		cardButtons.forEach(button -> {
+			handTable.add(button).height(button.getHeight()).width(button.getWidth()).space(10f);
+
+
+
+		});
+
+
+
+		rootTable.add(handTable);
+		rootTable.bottom();
+
 	}
 
 }
