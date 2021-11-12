@@ -80,10 +80,17 @@ public class TiledMapStage extends Stage {
                 addActor(actor);
                 cell.getTile().setId(counter);
 
+                if(player.getSelectedCard()!= null){
+                    if (player.getSelectedCard().tileCheck(actor)){
+                        EventListener eventListener = new TiledMapClickListener(actor,player);
+                        actor.addListener(eventListener);
 
-                EventListener eventListener = new TiledMapClickListener(actor,player);
-                actor.addListener(eventListener);
+                    }
+                }
+
                 actors.add(actor);
+
+
             }
         }
         for (int x = 0; x < tiledLayer.getWidth(); x++) {

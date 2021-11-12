@@ -10,6 +10,9 @@ import com.models.TiledMapActor;
 
 import java.util.Optional;
 
+import static com.javagame.GameClass.createConfirm;
+
+
 public class TiledMapClickListener extends ClickListener {
 
     private final Character character;
@@ -28,10 +31,8 @@ public class TiledMapClickListener extends ClickListener {
         this.character.getTargets().add(actor.getCell());
         //THIS IS HIGHLINTING CELLS
         character.highlightCells();
+        createConfirm();
 
-//        character.getTargets().forEach(cell -> {
-//            cell.getTile().setTextureRegion((TextureRegion)(cell.getTile().getProperties().get("selected")));
-//        });
 
 
 

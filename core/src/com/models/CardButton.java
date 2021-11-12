@@ -1,36 +1,45 @@
 package com.models;
 
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+
+
 import com.cards.AbsCard;
 
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
+import com.kotcrab.vis.ui.widget.VisImageButton;
+import com.kotcrab.vis.ui.widget.VisLabel;
 
-public class CardButton extends TextButton {
+
+public class CardButton extends VisImageButton {
 
 
     AbsCard card;
+    Label cost;
+    Label name;
+    Label cardText;
 
 
 
 
-    public CardButton(String text, Skin skin, AbsCard card) {
-        super(text, skin);
+
+    public CardButton(String text, String styleName, AbsCard card) {
+
+        super("default");
+
         this.card = card;
+        this.cost = new VisLabel(card.cost);
+        this.name = new VisLabel(card.name);
+        this.cardText = new VisLabel(card.text);
+
+        this.add(cost).top().left().padTop(4);
+
+        this.add(name).expand().top().padTop(4);
+
+        row();
+        this.add(cardText).colspan(3).pad(3);
 
     }
 
-    public CardButton(String text, Skin skin, String styleName, AbsCard card) {
-        super(text, skin, styleName);
-        this.card = card;
 
-    }
-
-    public CardButton(String text, TextButtonStyle style, AbsCard card) {
-        super(text, style);
-        this.card = card;
-    }
 
     public AbsCard getCard() {
         return card;

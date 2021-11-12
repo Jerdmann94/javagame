@@ -2,19 +2,20 @@ package com.cards;
 
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.kotcrab.vis.ui.widget.VisImageButton;
 import com.models.CardButton;
 import com.models.Character;
+import com.models.TiledMapActor;
 
 import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
 import java.util.List;
 
 public abstract class AbsCard implements PropertyChangeListener {
+    public String text = "card text";
     protected List <TiledMapTileLayer.Cell> cells;
-    protected List <TextButton> obuttons;
+    protected List <VisImageButton> obuttons;
     public final String name;
-    public final int cost;
+    public final String cost;
     public final int targets;
     protected final Character player;
     private Actor actor;
@@ -24,7 +25,7 @@ public abstract class AbsCard implements PropertyChangeListener {
 
     public AbsCard(String name, int cost, int targets, Character cha) {
         this.name = name;
-        this.cost = cost;
+        this.cost = Integer.toString(cost);
         this.targets = targets;
         this.player = cha;
 
@@ -34,6 +35,7 @@ public abstract class AbsCard implements PropertyChangeListener {
 
     public abstract void playCard();
     public abstract void discardCard();
+    public abstract boolean tileCheck(TiledMapActor actor);
 
     public Actor getActor() {
         return actor;
@@ -57,4 +59,5 @@ public abstract class AbsCard implements PropertyChangeListener {
     public CardButton getCardButton() {
         return cardButton;
     }
+
 }

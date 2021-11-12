@@ -27,6 +27,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.command.*;
+import com.kotcrab.vis.ui.VisUI;
+import com.kotcrab.vis.ui.widget.VisTable;
 import com.models.*;
 import com.models.Character;
 
@@ -42,20 +44,21 @@ public class GameClass extends ApplicationAdapter {
 	OrthographicCamera camera;
 	TiledMap tiledMap;
 	OrthogonalTiledMapRenderer tiledMapRenderer;
-	Skin skin;
-	Character player;
-	TiledMapStage stageMap;
-	Table handTable;
-	Table rootTable;
-	TextButton confirm;
+	public static Skin skin = new Skin();
+	static Character player;
+	static TiledMapStage stageMap;
+	static VisTable handTable;
+	static Table rootTable;
+	static TextButton confirm;
 
-	ArrayList<CardButton> cardButtons;
+	static ArrayList<CardButton> cardButtons;
 
 	
 	@Override
 	public void create () {
 
 
+		VisUI.load();
 
 		float w = Gdx.graphics.getWidth();
 		float h = Gdx.graphics.getHeight();
@@ -65,7 +68,7 @@ public class GameClass extends ApplicationAdapter {
 		camera = new OrthographicCamera();
 
 
-		skin = new Skin();
+
 
 		createSkinFormat();
 
@@ -80,6 +83,10 @@ public class GameClass extends ApplicationAdapter {
 
 		stageMap.setDebugAll(true);
 		createButtons();
+
+		stageMap.createButtonsForMap();
+		player.setX((int)stageMap.getActors().get(2).getX());
+		player.setY((int)stageMap.getActors().get(2).getY());
 
 
 
@@ -122,30 +129,33 @@ public class GameClass extends ApplicationAdapter {
 		rootTable.setFillParent(true);
 
 
-		//SKIN STUFF
-		Pixmap pixmap = new Pixmap(1, 1, com.badlogic.gdx.graphics.Pixmap.Format.RGBA8888);
-		pixmap.setColor(Color.WHITE);
-		pixmap.fill();
-		skin.add("white", new Texture(pixmap));
+//		//SKIN STUFF
+//		Pixmap pixmap = new Pixmap(1, 1, com.badlogic.gdx.graphics.Pixmap.Format.RGBA8888);
+//		pixmap.setColor(Color.WHITE);
+//		pixmap.fill();
+//		skin.add("white", new Texture(pixmap));
+//
+//		skin.add("default", new BitmapFont());
+//
+//		// Configure a TextButtonStyle and name it "default". Skin resources are stored by type, so this doesn't overwrite the font.
+//		TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
+//		textButtonStyle.up = skin.newDrawable("white", Color.DARK_GRAY);
+//		textButtonStyle.down = skin.newDrawable("white", Color.DARK_GRAY);
+//		textButtonStyle.checked = skin.newDrawable("white", Color.BLUE);
+//		textButtonStyle.over = skin.newDrawable("white", Color.LIGHT_GRAY);
+//		textButtonStyle.font = skin.getFont("default");
+//		skin.add("default", textButtonStyle);
 
-		skin.add("default", new BitmapFont());
+		skin = new Skin(Gdx.files.internal("uiskin.json"));
 
-		// Configure a TextButtonStyle and name it "default". Skin resources are stored by type, so this doesn't overwrite the font.
-		TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
-		textButtonStyle.up = skin.newDrawable("white", Color.DARK_GRAY);
-		textButtonStyle.down = skin.newDrawable("white", Color.DARK_GRAY);
-		textButtonStyle.checked = skin.newDrawable("white", Color.BLUE);
-		textButtonStyle.over = skin.newDrawable("white", Color.LIGHT_GRAY);
-		textButtonStyle.font = skin.getFont("default");
-		skin.add("default", textButtonStyle);
 	}
 
 	private void createButtons() {
 
-		handTable = new Table();
+		handTable = new VisTable(true);
 		cardButtons = new ArrayList<CardButton>();
 		for (int i = 0; i < player.getHand().size(); i++) {
-			cardButtons.add(new CardButton("Click me!", skin,player.getHand().get(i)));
+			cardButtons.add(new CardButton("Click me!", "default",player.getHand().get(i)));
             player.getHand().get(i).setButton(cardButtons.get(i));
 
 			EventListener eventListener = new CardListener(player);
@@ -159,11 +169,15 @@ public class GameClass extends ApplicationAdapter {
 					CardButton butt = (CardButton)actor;
 					player.setSelectedCard(butt.getCard());
 
-					butt.setText("Clicked");
+
                     stageMap.createButtonsForMap();
 					createConfirm();
 				}
 			});
+
+			//SET CARD LABELS
+
+
 
 		}
 
@@ -176,6 +190,8 @@ public class GameClass extends ApplicationAdapter {
 
 		tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
 
+
+
 	}
 
 	private void createPlayer() {
@@ -184,38 +200,41 @@ public class GameClass extends ApplicationAdapter {
 		sprite = new Sprite(region,0, 0,16,16);
 		sprite.setScale(4,4);
 		sprite.setOrigin(0,0);
-		sprite.setPosition((Gdx.graphics.getWidth()/2 - 160), (Gdx.graphics.getHeight()/2 - 320));
-		player = new Character((Gdx.graphics.getWidth()/2 - 160),(Gdx.graphics.getHeight()/2 - 320),sprite,100);
+		//sprite.setPosition((stageMap.getActors().get(2).getX()), (stageMap.getActors().get(2).getY()));
+		player = new Character((0),(0),sprite,100);
 
 	}
 
-	private void createConfirm(){
-		confirm = new TextButton("Confirm",skin);
+	public static void createConfirm(){
+		if(player.getTargets().size() == player.getSelectedCard().targets){
+			confirm = new TextButton("Confirm",skin);
 
-		confirm.setHeight(250);
-		confirm.setWidth(150);
-		confirm.setPosition(0,0);
-		confirm.addListener(new ChangeListener() {
-			public void changed (ChangeEvent event, Actor actor) {
+			confirm.setHeight(250);
+			confirm.setWidth(150);
+			confirm.setPosition(0,0);
+			confirm.addListener(new ChangeListener() {
+				public void changed (ChangeEvent event, Actor actor) {
 
-				TextButton butt = (TextButton)actor;
-				butt.setText("Clicked");
-				cardButtons.remove(player.getSelectedCard().getCardButton());
-				player.getSelectedCard().playCard();
-				player.resetCells();
-				removeConfirm();
-				buildHandTable();
+					TextButton butt = (TextButton)actor;
+					butt.setText("Clicked");
+					cardButtons.remove(player.getSelectedCard().getCardButton());
+					player.getSelectedCard().playCard();
+					player.resetCells();
+					removeConfirm();
+					buildHandTable();
 
-			}
-		});
-		rootTable.addActor(confirm);
+				}
+			});
+			rootTable.addActor(confirm);
+		}
+
 	}
 
-	private void removeConfirm() {
+	private static void removeConfirm() {
 		confirm.remove();
 		stageMap.removeActors();
 	}
-	private void buildHandTable(){
+	private static void buildHandTable(){
 		handTable.clearChildren();
 		handTable.remove();
 		handTable.pack();

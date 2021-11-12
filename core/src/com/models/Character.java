@@ -95,6 +95,7 @@ public class Character extends Unit{
         getTargets().forEach(cell -> {
             cell.getTile().setTextureRegion((TextureRegion) cell.getTile().getProperties().get("default"));
         });
+        setTargets(new ArrayList<>());
 
     }
 }
