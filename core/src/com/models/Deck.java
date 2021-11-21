@@ -21,13 +21,13 @@ public class Deck {
 
     private ArrayList<AbsCard> basicDeck() {
         ArrayList<AbsCard> cardList = new ArrayList<AbsCard>();
-        cardList.add(new BasicMoveCard("move",2,1,player));
-        cardList.add(new BasicMoveCard("move",2,1,player));
-        cardList.add(new BasicMoveCard("move",2,1,player));
-        cardList.add(new BasicMoveCard("move",2,1,player));
-        cardList.add(new BasicMoveCard("move",2,1,player));
-        cardList.add(new BasicMoveCard("move",2,1,player));
-        cardList.add(new BasicMoveCard("move",2,1,player));
+        cardList.add(new BasicMoveCard("move",2,1));
+        cardList.add(new BasicMoveCard("move",2,1));
+        cardList.add(new BasicMoveCard("move",2,1));
+        cardList.add(new BasicMoveCard("move",2,1));
+        cardList.add(new BasicMoveCard("move",2,1));
+        cardList.add(new BasicMoveCard("move",2,1));
+        cardList.add(new BasicMoveCard("move",2,1));
 
         return cardList;
     }

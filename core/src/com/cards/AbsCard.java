@@ -17,17 +17,17 @@ public abstract class AbsCard implements PropertyChangeListener {
     public final String name;
     public final String cost;
     public final int targets;
-    protected final Character player;
+
     private Actor actor;
     private CardButton cardButton;
 
 
 
-    public AbsCard(String name, int cost, int targets, Character cha) {
+    public AbsCard(String name, int cost, int targets) {
         this.name = name;
         this.cost = Integer.toString(cost);
         this.targets = targets;
-        this.player = cha;
+
 
 
 

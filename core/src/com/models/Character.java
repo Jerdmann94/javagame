@@ -7,10 +7,10 @@ import com.cards.AbsCard;
 
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class Character extends Unit{
 
+    private ArrayList<TiledMapTileLayer.Cell> possibleTargets;
     private Deck deck;
     private ArrayList<AbsCard> hand;
     private AbsCard selectedCard;
@@ -25,6 +25,7 @@ public class Character extends Unit{
         this.sprite = sprite;
         this.health = health;
         this.targets = new ArrayList<>();
+        this.possibleTargets = new ArrayList<>();
         this.deck = new Deck(this);
         this.hand = drawStartingHand();
 
@@ -53,6 +54,7 @@ public class Character extends Unit{
 
     public void setTargets(ArrayList<TiledMapTileLayer.Cell> targets) {
         this.targets = targets;
+        System.out.println("SETTING TARGETS");
     }
 
     public Deck getDeck() {
@@ -80,6 +82,14 @@ public class Character extends Unit{
 
     }
 
+    public ArrayList<TiledMapTileLayer.Cell> getPossibleTargets() {
+        return possibleTargets;
+    }
+
+    public void setPossibleTargets(ArrayList<TiledMapTileLayer.Cell> possibleTargets) {
+        this.possibleTargets = possibleTargets;
+    }
+
     public void highlightCells(){
         TextureRegion temp = (TextureRegion) getTargets().get(0).getTile().getProperties().get("selected");
         getTargets().forEach(cell -> {
@@ -90,11 +100,20 @@ public class Character extends Unit{
         }
 
     }
+
+
     public void resetCells(){
+        System.out.println(getTargets().size());
         TextureRegion temp = (TextureRegion) getTargets().get(0).getTile().getProperties().get("selected");
         getTargets().forEach(cell -> {
             cell.getTile().setTextureRegion((TextureRegion) cell.getTile().getProperties().get("default"));
+            System.out.println("reseting cell");
         });
+        getPossibleTargets().forEach(cell -> {
+            cell.getTile().setTextureRegion((TextureRegion) cell.getTile().getProperties().get("default"));
+            System.out.println("reseting cell");
+        });
+
         setTargets(new ArrayList<>());
 
     }

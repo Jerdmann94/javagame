@@ -10,7 +10,7 @@ import java.util.List;
 
 public class Finder {
     public void find(Character unit) {
-        unit.setTargets(new ArrayList<TiledMapTileLayer.Cell>());
+
 
 
     }

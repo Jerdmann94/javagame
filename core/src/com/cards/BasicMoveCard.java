@@ -7,9 +7,12 @@ import com.models.TiledMapActor;
 
 import java.beans.PropertyChangeEvent;
 
+
+import static com.javagame.GameClass.player;
+
 public class BasicMoveCard extends AbsCard {
-    public BasicMoveCard(String name, int cost, int targets, Character player) {
-        super(name, cost, targets, player);
+    public BasicMoveCard(String name, int cost, int targets ) {
+        super(name, cost, targets);
     }
 
     @Override
@@ -31,12 +34,21 @@ public class BasicMoveCard extends AbsCard {
 
     @Override
     public boolean tileCheck(TiledMapActor actor) {
-        System.out.println(player.getX() + " " + player.getY());
-        System.out.println(actor.getCell().getTile().getProperties().get("x") + " "+actor.getCell().getTile().getProperties().get("y"));
-        if ((int)actor.getCell().getTile().getProperties().get("x") == player.getX()){
+
+        int x = (int)actor.getCell().getTile().getProperties().get("x");
+        int y = (int)actor.getCell().getTile().getProperties().get("y");
+
+
+        if (x - 64 == player.getX() && y == player.getY() ){
             return true;
         }
-        else if((int)actor.getCell().getTile().getProperties().get("y") == player.getY()){
+        else if (x + 64 == player.getX() && y == player.getY() ){
+            return true;
+        }
+        else if (x == player.getX() && y - 64 == player.getY() ){
+            return true;
+        }
+        else if (x == player.getX() && y + 64 == player.getY() ){
             return true;
         }
         else

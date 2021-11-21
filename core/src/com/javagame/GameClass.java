@@ -45,7 +45,7 @@ public class GameClass extends ApplicationAdapter {
 	TiledMap tiledMap;
 	OrthogonalTiledMapRenderer tiledMapRenderer;
 	public static Skin skin = new Skin();
-	static Character player;
+	public static Character player;
 	static TiledMapStage stageMap;
 	static VisTable handTable;
 	static Table rootTable;
@@ -158,8 +158,8 @@ public class GameClass extends ApplicationAdapter {
 			cardButtons.add(new CardButton("Click me!", "default",player.getHand().get(i)));
             player.getHand().get(i).setButton(cardButtons.get(i));
 
-			EventListener eventListener = new CardListener(player);
-			cardButtons.get(i).addListener(eventListener);
+//			EventListener eventListener = new CardListener(player);
+//			cardButtons.get(i).addListener(eventListener);
 
 			cardButtons.get(i).setHeight(250);
 			cardButtons.get(i).setWidth(150);
@@ -171,6 +171,7 @@ public class GameClass extends ApplicationAdapter {
 
 
                     stageMap.createButtonsForMap();
+
 					createConfirm();
 				}
 			});
